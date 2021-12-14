@@ -1,6 +1,6 @@
-import * as vscode from "vscode";
+const vscode = require('vscode');
 
-export class WebAppPanel {
+class WebAppPanel {
 
     static currentPanel = undefined;
 
@@ -104,8 +104,10 @@ export class WebAppPanel {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Mockswitch</title>
         </head>
-        <body>
-            <iframe width="100%" height="100%" src='http://locahost:1025'> </iframe>
+        <body style="padding:0;">
+            <iframe style="    width: 100%;
+            min-height: 800px;
+            border: none;" frameBorder="0" src='http://localhost:1026'> </iframe>
         </body>
         </html> `;
     }
@@ -114,4 +116,8 @@ function getWebviewOptions() {
     return {
         enableScripts: true,
     };
+}
+
+module.exports = {
+	WebAppPanel
 }
