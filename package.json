@@ -10,51 +10,118 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscodeexample.helloWorld",
-    "onCommand:vscodevuecli:openVueApp"
+    "onCommand:vscodevuecli:openMockswitch"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscodeexample.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "vscodevuecli:openVueApp",
-        "title": "Open Vue App"
+        "command": "vscodevuecli:openMockswitch",
+        "title": "Mockswitch"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Node Exec configurations",
+      "properties": {
+        "mockswitch.node.cwd": {
+          "type": "string",
+          "default": "${execPath}",
+          "description": "Set the working directory of the Node.js process"
+        },
+        "mockswitch.node.program": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "File to execute (comming soon)"
+        },
+        "mockswitch.node.clearOutput": {
+          "type": "boolean",
+          "default": true,
+          "description": "Clear output before execution"
+        },
+        "mockswitch.node.showInfo": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show start and end info"
+        },
+        "mockswitch.node.showStdout": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show console output"
+        },
+        "mockswitch.node.showStderr": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show errors"
+        },
+        "mockswitch.node.terminalMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use the integrated terminal"
+        },
+        "mockswitch.node.nodeBin": {
+          "type": "string",
+          "default": "node",
+          "description": "Node binary"
+        },
+        "mockswitch.node.includeCode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Some code that is executed with each run"
+        },
+        "mockswitch.node.executeFileOrSelection": {
+          "type": "string",
+          "default": "both",
+          "description": "Execute always the file ('file') only selected code ('selection') or both ('both')"
+        },
+        "mockswitch.node.outputWindowName": {
+          "type": "string",
+          "default": "Node.js",
+          "description": "Output-Channel Name"
+        },
+        "mockswitch.node.env": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "default": null,
+          "description": "Add execution environment variables"
+        },
+        "mockswitch.node.args": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "default": null,
+          "description": "Add execution arguments"
+        },
+        "mockswitch.node.options": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "default": null,
+          "description": "Add execution options"
+        },
+        "mockswitch.node.legacyMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, the extention will not use new features and options."
+        }
+      }
+    }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run package",
-    "compile": "webpack",
-    "watch": "concurrently \"npm --prefix web run dev\" \"webpack --watch\"",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "vsce-publish": "vsce publish",
+    "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.4",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "14.x",
-    "@types/vscode": "^1.63.0",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "@typescript-eslint/parser": "^5.1.0",
-    "@vscode/test-electron": "^1.6.2",
-    "concurrently": "^6.4.0",
-    "eslint": "^8.1.0",
-    "glob": "^7.1.7",
-    "mocha": "^9.1.3",
-    "ts-loader": "^9.2.5",
-    "typescript": "^4.4.4",
-    "webpack": "^5.52.1",
-    "webpack-cli": "^4.8.0"
-  },
-  "dependencies": {
     "vscode": "^1.1.37"
   }
 }

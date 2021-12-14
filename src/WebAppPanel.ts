@@ -23,7 +23,7 @@ export class WebAppPanel {
         // Otherwise, create a new panel. 
         const panel = vscode.window.createWebviewPanel(
             WebAppPanel.viewType,
-            'Web App Panel',
+            'Mockswitch',
             column || vscode.ViewColumn.One,
             getWebviewOptions(extensionUri),
         );
