@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { WebAppPanel } from './WebAppPanel';
+import { WebAppPanel } from './launch-app';
 const spawn = require('child_process').spawn;
 const fs = require('fs');
 const path = require('path');
@@ -10,7 +10,7 @@ export function activate(context) {
 	const outputChannel = vscode.window.createOutputChannel(config.outputWindowName);
 	// test for running process
 	if (runningStatus) {
-		vscode.window.showErrorMessage('Process is already running!')
+		vscode.window.showErrorMessage('Process is already running!');
 		return;
 	}
 
@@ -74,12 +74,12 @@ export function activate(context) {
 	process.stdout.on('data', function (data) {
 		if (!config.showStdout) return;
 		outputChannel.append(data.toString());
-	})
+	});
 	process.stderr.on('data', function (data) {
 		if (!config.showStderr) return;
 		outputChannel.appendLine('Error: ');
 		outputChannel.appendLine(data.toString());
-	})
+	});
 	process.on('close', function () {
 		fs.unlink(tmpFile, function (err) {
 			if (err) {
@@ -114,7 +114,7 @@ export function activate(context) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
-			'vscodevuecli:openMockswitch', () => {
+			'mockswitch:openMockswitch', () => {
 				WebAppPanel.createOrShow(context.extensionUri);
 			}
 		)
