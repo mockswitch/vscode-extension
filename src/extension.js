@@ -4,8 +4,7 @@ const spawn = require('child_process').spawn;
 const fs = require('fs');
 const path = require('path');
 const config = vscode.workspace.getConfiguration('mockswitch.node');
-let runningStatus = null;
-
+let process;
 function activate(context) {
 
 
@@ -15,12 +14,10 @@ function activate(context) {
 
 				const outputChannel = vscode.window.createOutputChannel(config.outputWindowName);
 				// test for running process
-				if (runningStatus) {
-					vscode.window.showErrorMessage('Process is already running!');
-					return;
-				}
-
-				const dirName = path.resolve(__dirname, '../dist-web/server.js');
+				if (process) {
+					vscode.window.showErrorMessage('Welcome to Mockswitch');
+				}else{
+					const dirName = path.resolve(__dirname, '../dist-web/releases');
 
 				// get config params object
 				const options = {};
@@ -48,47 +45,51 @@ function activate(context) {
 				if (config.showInfo) {
 					outputChannel.appendLine('Info: Start process (' + startTime.toLocaleTimeString() + ')')
 				}
-				try {
-					// spawn new node.js process
-					process = spawn(`${nodeBin} ${dirName}`, []);
+				setTimeout(()=>{
 
-					// process event handlers
-					process.stdout.on('data', function (data) {
-						if (!config.showStdout) return;
-						outputChannel.append(data.toString());
-					});
-					process.stderr.on('data', function (data) {
-						if (!config.showStderr) return;
-						outputChannel.appendLine('Error: ');
-						outputChannel.appendLine(data.toString());
-					});
-					process.on('close', function () {
-						if (runningStatus) {
-							if (config.showInfo) {
-								outputChannel.appendLine('Info: Execution time ' + getDuration(startTime, new Date()) + ' (mm:ss:fff)')
+					try {
+						// spawn new node.js process
+					 process = spawn(`${dirName}`, []);
+	
+						// process event handlers
+						process.stdout.on('data', function (data) {
+							if (!config.showStdout) return;
+							outputChannel.append(data.toString());
+						});
+						process.stderr.on('data', function (data) {
+							if (!config.showStderr) return;
+							outputChannel.appendLine('Error: ');
+							outputChannel.appendLine(data.toString());
+						});
+						process.on('close', function () {
+							if (runningStatus) {
+								if (config.showInfo) {
+									outputChannel.appendLine('Info: Execution time ' + getDuration(startTime, new Date()) + ' (mm:ss:fff)')
+								}
+								 runningStatus.dispose();
+								 runningStatus = null;
 							}
-							// runningStatus.dispose();
-							runningStatus = null;
-						}
-					});
-					process.on('error', function (processError) {
-						outputChannel.appendLine('Process error: ')
-						outputChannel.appendLine(processError.toString())
-						if (config.showInfo) {
-							outputChannel.appendLine('Info: End process with errors! Execution time ' + getDuration(startTime, new Date()) + ' (mm:ss:fff)')
-						}
-						if (runningStatus) {
-							// runningStatus.dispose();
-							runningStatus = null;
-						}
-					});
+						});
+						process.on('error', function (processError) {
+							outputChannel.appendLine('Process error: ')
+							outputChannel.appendLine(processError.toString())
+							if (config.showInfo) {
+								outputChannel.appendLine('Info: End process with errors! Execution time ' + getDuration(startTime, new Date()) + ' (mm:ss:fff)')
+							}
+							if (runningStatus) {
+								runningStatus.dispose();
+								 runningStatus = null;
+							}
+						});
+	
+	
+					} catch (err) {
+						outputChannel.appendLine(`Error`, err);
+					}
+	
 
-
-				} catch (err) {
-					outputChannel.appendLine(`Error`, err);
+				}, 500);
 				}
-
-
 
 				WebAppPanel.createOrShow(context.extensionUri);
 			}
@@ -97,7 +98,11 @@ function activate(context) {
 
 }
 
-function deactivate() { }
+function deactivate() {
+	if(process){
+		process.kill();
+	}
+ }
 
 // get a duration as Timestring (mm:ss.fff)
 function getDuration(start, end) {

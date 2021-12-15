@@ -1,9 +1,0 @@
-{
-  "name": "Mockswitch",
-  "short_name": "Mockswitch",
-  "icons": [],
-  "start_url": "/",
-  "background_color": "#4d4d4d",
-  "display": "standalone",
-  "theme_color": "#4d4d4d"
-}
