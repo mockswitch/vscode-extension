@@ -15,7 +15,7 @@ function activate(context) {
 				const outputChannel = vscode.window.createOutputChannel(config.outputWindowName);
 				// test for running process
 				if (process) {
-					vscode.window.showErrorMessage('Welcome to Mockswitch');
+					vscode.window.showInformationMessage('Welcome to Mockswitch');
 				}else{
 					const dirName = path.resolve(__dirname, '../dist-web/releases');
 
@@ -35,8 +35,6 @@ function activate(context) {
 				};
 				options.detached = true;
 				const startTime = new Date();
-				const nodeBin = (typeof config.nodeBin === 'string') ? config.nodeBin : 'node';
-
 				runningStatus = vscode.window.setStatusBarMessage('Running...');
 				outputChannel.show(true)
 				if (config.clearOutput) {
@@ -48,7 +46,6 @@ function activate(context) {
 				setTimeout(()=>{
 
 					try {
-						// spawn new node.js process
 					 process = spawn(`${dirName}`, []);
 	
 						// process event handlers

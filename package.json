@@ -1,13 +1,26 @@
 {
   "name": "mockswitch",
   "displayName": "MockSwitch",
-  "description": "",
+  "description": "Test your APIs with our most powerful rest client, bulid your data models, document your APIs, do your end to end testing and integrate your services by easily switching between your real and mock services.",
+  "keywords":["Rest Client", "Mock server", "Api Testing", "Api Client","Productivity",""],
+  "license":"SEE LICENSE IN LICENSE.txt",
+  "extensionKind":[
+    "ui"
+  ],
+  "author": {
+    "name": "Mockswitch LLC"
+  },
+  "bugs": {
+    "url": "https://github.com/mockswitch/support/issues",
+    "email": "hello@mockswitch.com"
+  },
+  "homepage": "https://mockswitch.com",
   "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/mockswitch/support.git"
   },
-  "icon": "icon_64x64.png",
+  "icon": "icon_128x128.png",
   "engines": {
     "vscode": "^1.63.0"
   },
@@ -49,12 +62,12 @@
         },
         "mockswitch.node.showInfo": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Show start and end info"
         },
         "mockswitch.node.showStdout": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Show console output"
         },
         "mockswitch.node.showStderr": {
@@ -87,8 +100,8 @@
         },
         "mockswitch.node.outputWindowName": {
           "type": "string",
-          "default": "Node.js",
-          "description": "Output-Channel Name"
+          "default": "Mockswitch",
+          "description": "Mockswitch Terminal"
         },
         "mockswitch.node.env": {
           "type": [
@@ -116,7 +129,7 @@
         },
         "mockswitch.node.legacyMode": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "If true, the extention will not use new features and options."
         }
       }
