@@ -106,7 +106,7 @@ class WebAppPanel {
         </head>
         <body style="padding:0;">
             <iframe style="    width: 100%;
-            min-height: 800px;
+            min-height: 100vh;
             sandbox="allow-scripts allow-popups allow-same-origin"
             border: none;" frameBorder="0" src='http://localhost:1026'> </iframe>
         </body>
