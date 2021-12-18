@@ -1,12 +1,15 @@
 const { IS_OSX } = require('./constants');
 const crypto = require('crypto');
 const path = require('path');
+const fs = require('fs');
 const vscode = require('vscode');
+const XML = require('xmldom');
 
 class MockswitchHome {
     static defaultStartUrl = '/';
 
-    constructor() {
+    constructor(context) {
+        this.context = context;
         this.subscriptions = [];
         this._currentPanel = undefined;
         this._lastStartUrl = MockswitchHome.defaultStartUrl;
@@ -24,6 +27,7 @@ class MockswitchHome {
             if (this._currentPanel) {
                 if (this._lastStartUrl !== startUrl) {
                     this._currentPanel.webview.html = this.getWebviewContent(startUrl);
+                    //this._currentPanel.webview.html = this.getWebViewHtml(startUrl);
                 }
                 return this._currentPanel.reveal(column);
             }
@@ -41,19 +45,21 @@ class MockswitchHome {
             {
                 enableScripts: true,
                 retainContextWhenHidden: true,
+                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, '/dist-web')), vscode.Uri.file(path.join(this.context.extensionPath, '/dist-web/assets'))]
             }
         );
         this.subscriptions.push(panel.onDidDispose(this.onPanelDisposed.bind(this)));
         panel.iconPath = vscode.Uri.file(
             path.join(
-                __dirname,
-                '../',
+                this.context.extensionPath,
+                '/',
                 'icon_64x64.png'
             )
         );
         panel.webview.html = this.getLoadingContent();
         try {
             panel.webview.html = this.getWebviewContent(startUrl);
+            // panel.webview.html = this.getWebViewHtml(panel);
         } catch (err) {
             if (!err.toString().includes('Webview is disposed')) {
                 notifyError('Start Mockswitch Home Server', err);
@@ -78,7 +84,21 @@ class MockswitchHome {
       </body>
       </html>`;
     }
-
+    getWebViewHtml(panel) {
+        const htmlPath = vscode.Uri.file(path.join(this.context.extensionPath, '/dist-web', 'index.html'));
+        let html = fs.readFileSync(htmlPath.fsPath, 'utf8');
+        html = html.replace(/(href=|src=)(.+?)(\ |>)/g, (m, $1, $2, $3) => {
+            const ur = `${$2}`.replaceAll('"', '');
+            if (!ur.startsWith('data:')) {
+                const basePath = path.join(
+                    this.context.extensionPath, 'dist-web');
+                const uri = `${$1}"vscode-resource:${basePath}${ur}"`;
+                return uri;
+            }
+            return `${$1}"${ur}"`;
+        });
+        return html;
+    }
     getWebviewContent(startUrl) {
         this._lastStartUrl = startUrl;
         const theme = this.getTheme();
@@ -94,7 +114,7 @@ class MockswitchHome {
       });
     }
     window.addEventListener('message', (e) => {
-        debugger;
+                  debugger;
         window.dispatchEvent(new KeyboardEvent('keydown', JSON.parse(e.data)));
     });
   </script>

@@ -87,7 +87,7 @@ function activate(context) {
 
 					}, 500);
 				}
-				const web = new MockswitchHome();
+				const web = new MockswitchHome(context);
 				return web.toggle();
 			}
 		)
