@@ -1,6 +1,7 @@
 {
   "name": "mockswitch",
-  "displayName": "MockSwitch",
+  "displayName": "Mockswitch",
+  "publisher":"Mockswitch LLC",
   "description": "Test your APIs with our most powerful rest client, bulid your data models, document your APIs, do your end to end testing and integrate your services by easily switching between your real and mock services.",
   "keywords": [
     "Rest Client",
@@ -74,7 +75,7 @@
         },
         "mockswitch.node.showStdout": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Show console output"
         },
         "mockswitch.node.showStderr": {
@@ -148,5 +149,8 @@
   "devDependencies": {
     "@types/node": "~12",
     "@types/vscode": "~1.57.0"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1"
   }
 }

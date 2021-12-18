@@ -1,5 +1,6 @@
 const vscode = require('vscode');
-const {MockswitchHome} = require('./launch-app');
+const os = require('os');
+const { WebAppPanel } = require('./launch-app');
 const spawn = require('child_process').spawn;
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +18,21 @@ function activate(context) {
 				if (process) {
 					vscode.window.showInformationMessage('Welcome to Mockswitch');
 				} else {
-					const dirName = path.resolve(__dirname, '../dist-web/node14-macos');
+					let opsys = os.platform();
+					if (opsys == "darwin") {
+						opsys = "mac";
+					} else if (opsys == "win32" || opsys == "win64") {
+						opsys = "win";
+					} else if (opsys == "linux") {
+						opsys = "linux";
+					}
+					let enginePath = ``;
+					if(opsys === 'mac'){
+						enginePath = `node14-macos`;
+					}else if(opsys === 'win'){
+						enginePath = `node14-win.exe`;
+					}
+					const dirName = path.resolve(__dirname, `../dist-web/${enginePath}`);
 
 					// get config params object
 					const options = {};
@@ -40,9 +55,7 @@ function activate(context) {
 					if (config.clearOutput) {
 						outputChannel.clear()
 					}
-					if (config.showInfo) {
-						outputChannel.appendLine('Info: Start process (' + startTime.toLocaleTimeString() + ')')
-					}
+				
 					setTimeout(() => {
 
 						try {
@@ -87,8 +100,8 @@ function activate(context) {
 
 					}, 500);
 				}
-				const web = new MockswitchHome(context);
-				return web.toggle();
+
+				WebAppPanel.createOrShow(context.extensionUri);
 			}
 		)
 	);
@@ -106,7 +119,28 @@ function getDuration(start, end) {
 	const duration = new Date(end - start)
 	return numPad(duration.getMinutes(), 1) + ':' + numPad(duration.getSeconds(), 2) + ':' + numPad(duration.getMilliseconds(), 3)
 }
+function getOS() {
+	const userAgent = vscode.window.navigator.userAgent;
+	const platform = vscode.window.navigator.platform;
+	const macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"];
+	const windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"];
+	const iosPlatforms = ["iPhone", "iPad", "iPod"];
+	let os = null;
 
+	if (macosPlatforms.indexOf(platform) !== -1) {
+		os = "macOS";
+	} else if (iosPlatforms.indexOf(platform) !== -1) {
+		os = null;
+	} else if (windowsPlatforms.indexOf(platform) !== -1) {
+		os = "Windows";
+	} else if (/Android/.test(userAgent)) {
+		os = null;
+	} else if (!os && /Linux/.test(platform)) {
+		os = "Linux";
+	}
+
+	return os;
+}
 // Numberpadding
 function numPad(number, size) {
 	let result = number + ''

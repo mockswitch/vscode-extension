@@ -1,4 +1,4 @@
-# mockswitch README
+# Mockswitch
 
 This is the README for your extension "mockswitch". After writing up a brief description, we recommend including the following sections.
 
