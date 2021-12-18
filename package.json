@@ -2,9 +2,16 @@
   "name": "mockswitch",
   "displayName": "MockSwitch",
   "description": "Test your APIs with our most powerful rest client, bulid your data models, document your APIs, do your end to end testing and integrate your services by easily switching between your real and mock services.",
-  "keywords":["Rest Client", "Mock server", "Api Testing", "Api Client","Productivity",""],
-  "license":"SEE LICENSE IN LICENSE.txt",
-  "extensionKind":[
+  "keywords": [
+    "Rest Client",
+    "Mock server",
+    "Api Testing",
+    "Api Client",
+    "Productivity",
+    ""
+  ],
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "extensionKind": [
     "ui"
   ],
   "author": {
@@ -139,6 +146,7 @@
     "vsce-publish": "vsce publish"
   },
   "devDependencies": {
-    "vscode": "^1.1.37"
+    "@types/node": "~12",
+    "@types/vscode": "~1.57.0"
   }
 }
